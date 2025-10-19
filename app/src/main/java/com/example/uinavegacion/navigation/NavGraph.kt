@@ -14,6 +14,11 @@ import com.example.uinavegacion.ui.screen.ConfirmationScreen
 import com.example.uinavegacion.ui.screen.DriverSearchScreen
 import com.example.uinavegacion.ui.screen.DriverSelectionScreen
 import com.example.uinavegacion.ui.screen.DriverEnRouteScreen
+import com.example.uinavegacion.ui.screen.DriverProfileScreen
+import com.example.uinavegacion.ui.screen.ChatScreen
+import com.example.uinavegacion.ui.screen.TripSummaryScreen
+import com.example.uinavegacion.ui.screen.RatingScreen
+import com.example.uinavegacion.ui.screen.MyTripsScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -55,6 +60,26 @@ fun AppNavGraph(navController: NavHostController) {
         
         composable(Route.DriverEnRoute.path) {
             DriverEnRouteScreen(navController)
+        }
+
+        composable(Route.DriverProfile.path) {
+            DriverProfileScreen(navController)
+        }
+
+        composable(Route.Chat.path) {
+            ChatScreen(navController)
+        }
+
+        composable(Route.TripSummary.path) {
+            TripSummaryScreen(navController)
+        }
+
+        composable(Route.Rating.path) {
+            RatingScreen(navController)
+        }
+
+        composable(Route.MyTrips.path) {
+            MyTripsScreen(navController)
         }
     }
 }

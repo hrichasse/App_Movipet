@@ -11,6 +11,12 @@ sealed class Route(val path: String) { // Cada objeto representa una pantalla
     data object DriverSearch : Route("driver_search") // Búsqueda de conductor
     data object DriverSelection : Route("driver_selection") // Selección de conductor
     data object DriverEnRoute : Route("driver_en_route") // Conductor en camino
+    // Nuevas pantallas solicitadas
+    data object DriverProfile : Route("driver_profile") // Perfil del conductor
+    data object Chat : Route("chat") // Chat en tiempo real con conductor
+    data object TripSummary : Route("trip_summary") // Resumen / comprobante del viaje
+    data object Rating : Route("rating") // Calificación y comentarios
+    data object MyTrips : Route("my_trips") // Historial de viajes
 }
 
 /*
