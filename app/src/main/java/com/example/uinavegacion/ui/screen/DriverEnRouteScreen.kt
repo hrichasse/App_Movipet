@@ -139,9 +139,9 @@ fun DriverEnRouteScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Botón de enviar mensaje
+            // Botón de enviar mensaje -> abre Chat
             Button(
-                onClick = { /* Enviar mensaje */ },
+                onClick = { navController.navigate(Route.Chat.path) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -154,6 +154,62 @@ fun DriverEnRouteScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Enviar mensaje al conductor", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Acciones rápidas: Ver perfil y Chatear
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = { navController.navigate(Route.DriverProfile.path) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Person, contentDescription = "Perfil")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Ver perfil")
+                }
+
+                OutlinedButton(
+                    onClick = { navController.navigate(Route.Chat.path) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Message, contentDescription = "Chatear")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Chatear")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Botones adicionales de prueba: Resumen del viaje y Calificar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 0.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate(Route.TripSummary.path) },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = MoviPetOrange)
+                ) {
+                    Icon(Icons.Default.ReceiptLong, contentDescription = "Resumen")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Resumen del viaje")
+                }
+
+                Button(
+                    onClick = { navController.navigate(Route.Rating.path) },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = MoviPetOrange)
+                ) {
+                    Icon(Icons.Default.Star, contentDescription = "Calificar")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Calificar")
+                }
             }
             
             Spacer(modifier = Modifier.weight(1f))
