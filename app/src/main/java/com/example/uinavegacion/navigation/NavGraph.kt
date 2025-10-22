@@ -19,6 +19,7 @@ import com.example.uinavegacion.ui.screen.ChatScreen
 import com.example.uinavegacion.ui.screen.TripSummaryScreen
 import com.example.uinavegacion.ui.screen.RatingScreen
 import com.example.uinavegacion.ui.screen.MyTripsScreen
+<<<<<<< HEAD
 import androidx.compose.foundation.layout.PaddingValues
 
 
@@ -26,6 +27,11 @@ import androidx.compose.foundation.layout.PaddingValues
 fun AppNavGraph(navController: NavHostController,
                 contentPadding: PaddingValues
 ) {
+=======
+
+@Composable
+fun AppNavGraph(navController: NavHostController) {
+>>>>>>> 7db42d458292e54c947495fafecdf6e3159c32d1
     NavHost(
         navController = navController,
         startDestination = Route.Login.path

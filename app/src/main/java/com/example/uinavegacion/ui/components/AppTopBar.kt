@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.* // remember / mutableStateOf
 import androidx.compose.ui.text.style.TextOverflow
 
+<<<<<<< HEAD
 // --- imports agregados para logo y colores de marca ---
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
@@ -32,6 +33,15 @@ fun AppTopBar(
     onHome: () -> Unit = {},       // Navega a Home                   // ← default agregado
     onLogin: () -> Unit = {},      // Navega a Login                  // ← default agregado
     onRegister: () -> Unit = {}    // Navega a Registro               // ← default agregado
+=======
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable // Composable reutilizable: barra superior
+fun AppTopBar(
+    onOpenDrawer: () -> Unit, // Abre el drawer (hamburguesa)
+    onHome: () -> Unit,       // Navega a Home
+    onLogin: () -> Unit,      // Navega a Login
+    onRegister: () -> Unit    // Navega a Registro
+>>>>>>> 7db42d458292e54c947495fafecdf6e3159c32d1
 ) {
     //lo que hace es crear una variable de estado recordada que le dice a la interfaz
     // si el menú desplegable de 3 puntitos debe estar visible (true) o oculto (false).
@@ -39,6 +49,7 @@ fun AppTopBar(
 
     CenterAlignedTopAppBar( // Barra alineada al centro
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+<<<<<<< HEAD
             containerColor = MoviPetOrange,                 // ← naranjo de marca
             titleContentColor = MoviPetWhite,               // ← texto blanco
             navigationIconContentColor = MoviPetWhite,      // ← íconos blancos
@@ -67,6 +78,18 @@ fun AppTopBar(
                     overflow = TextOverflow.Ellipsis // agrega "..." si no cabe
                 )
             }
+=======
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
+        title = { // Slot del título
+            Text(
+                text = "Demo Navegación Compose", // Título visible
+                style = MaterialTheme.typography.titleLarge, // Estilo grande
+                maxLines = 1,              // asegura una sola línea Int.MAX_VALUE   // permite varias líneas
+                overflow = TextOverflow.Ellipsis // agrega "..." si no cabe
+
+            )
+>>>>>>> 7db42d458292e54c947495fafecdf6e3159c32d1
         },
         navigationIcon = { // Ícono a la izquierda (hamburguesa)
             IconButton(onClick = onOpenDrawer) { // Al presionar, abre drawer
@@ -105,4 +128,8 @@ fun AppTopBar(
             }
         }
     )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7db42d458292e54c947495fafecdf6e3159c32d1

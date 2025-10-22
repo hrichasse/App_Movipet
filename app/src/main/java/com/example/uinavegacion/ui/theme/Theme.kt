@@ -59,4 +59,8 @@ fun UINavegacionTheme(
         typography = Typography,
         content = content
     )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7db42d458292e54c947495fafecdf6e3159c32d1
