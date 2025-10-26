@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -63,4 +64,24 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("androidx.compose.material:material-icons-extended")
+
+    // Ubicación nativa (FusedLocationProviderClient)
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
+    // Google Maps para Compose
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+
+    // (Opcional) Kotlin Coroutines Play Services helpers
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    // Lifecycle + Compose (ya declarada arriba en 2.9.4) — eliminamos duplicado que causaba advertencia/error en IDE
+
+    // Room Database para persistencia
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+        // DataStore para preferencias (tema oscuro/claro)
+        implementation("androidx.datastore:datastore-preferences:1.1.1")
 }

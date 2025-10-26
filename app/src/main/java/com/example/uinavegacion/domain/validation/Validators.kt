@@ -12,8 +12,11 @@ fun validateNameLettersOnly(nombre: String): String?{
 //validaciones del correo: formato y no este vacio
 fun validateEmail(email: String): String?{
     if(email.isBlank()) return "El correo es obligatorio"
-    val ok = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    return if(!ok) "Formato de correo Inválido" else null
+    // Regla específica solicitada: debe contener '@' y terminar en '.com'
+    // Ejemplo válido: usuario@dominio.com
+    val regexCom = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.com$")
+    val ok = regexCom.matches(email)
+    return if(!ok) "Formato de correo inválido. Debe incluir '@' y terminar en .com" else null
 }
 
 //validacion de teléfono: no vacio, longitud, solo numeros
@@ -27,11 +30,12 @@ fun validatePhoneDigitsOnly(phone:String): String? {
 //validaciones para la seguridad de la contraseña
 fun validateStrongPass(pass: String): String? {
     if(pass.isBlank()) return "Debes escribir tu contraseña"
-    if(pass.length < 8) return "Debe tener una logintud de más de 7 caracteres"
+    if(pass.length < 8) return "Debe tener una longitud de más de 7 caracteres"
     if(!pass.any { it.isUpperCase() }) return "Debe contener al menos una mayúscula"
     if(!pass.any { it.isDigit() }) return "Debe contener al menos un número"
     if(!pass.any { it.isLowerCase() }) return "Debe contener al menos una minúscula"
-    if(!pass.any { it.isLetterOrDigit() }) return "Debe contener al menos un caracter especial"
+    // Debe contener al menos un caracter no alfanumérico (especial)
+    if(!pass.any { !it.isLetterOrDigit() }) return "Debe contener al menos un caracter especial"
     if(pass.contains(' ')) return "No puede contener espacios en blanco"
     return null
 }
@@ -39,5 +43,5 @@ fun validateStrongPass(pass: String): String? {
 //validar que las claves coincidan
 fun validateConfirm(pass:String, confirm: String): String?{
     if(confirm.isBlank()) return "Debe confirmar su contraseña"
-    return if(pass != confirm) "Las contraseñas no son iguales" else null
+    return if(pass != confirm) "Las contraseñas no coinciden" else null
 }

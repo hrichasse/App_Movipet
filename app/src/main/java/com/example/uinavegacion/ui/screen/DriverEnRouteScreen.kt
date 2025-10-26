@@ -10,18 +10,59 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.uinavegacion.location.LocationViewModel
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.notification.NotificationHelper
+import com.example.uinavegacion.ui.components.CurrentLocationMap
+import com.example.uinavegacion.ui.components.RequestLocationPermissions
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
+import kotlinx.coroutines.delay
 
 @Composable
 fun DriverEnRouteScreen(navController: NavController) {
+    val context = LocalContext.current
+    val viewModel: LocationViewModel = viewModel()
+    var hasPermission by remember { mutableStateOf(false) }
+    var permissionRequested by remember { mutableStateOf(false) }
+
+    val location by viewModel.location.collectAsStateWithLifecycle()
+
+    // Simular notificaciones de progreso del viaje
+    LaunchedEffect(Unit) {
+        delay(5000) // 5 segundos: conductor cerca
+        NotificationHelper.notifyDriverNearby(context)
+        
+        delay(10000) // 15 segundos total: viaje iniciado
+        NotificationHelper.notifyTripStarted(context)
+    }
+
+    // Solicitar permisos y comenzar rastreo
+    if (!permissionRequested) {
+        RequestLocationPermissions { granted ->
+            hasPermission = granted
+            permissionRequested = true
+            if (granted) {
+                viewModel.start()
+            }
+        }
+    }
+
+    // Detener rastreo al salir de la pantalla
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stop()
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,55 +134,56 @@ fun DriverEnRouteScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Mapa simulado
+            // Mapa de seguimiento en tiempo real
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp),
+                    .height(320.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MoviPetLightGray)
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                if (hasPermission) {
+                    CurrentLocationMap(
+                        location = location,
+                        modifier = Modifier.fillMaxSize(),
+                        zoom = 16f,
+                        showMyLocationButton = true
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        // Icono del auto (conductor)
-                        Icon(
-                            Icons.Default.DirectionsCar,
-                            contentDescription = "Driver Car",
-                            modifier = Modifier.size(40.dp),
-                            tint = MoviPetOrange
-                        )
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        // Icono de ubicación del usuario
-                        Icon(
-                            Icons.Default.Pets,
-                            contentDescription = "User Location",
-                            modifier = Modifier.size(30.dp),
-                            tint = MoviPetTeal
-                        )
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        Text(
-                            text = "Mapa de ruta",
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                Icons.Default.LocationOff,
+                                contentDescription = "Location disabled",
+                                modifier = Modifier.size(40.dp),
+                                tint = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Seguimiento en tiempo real",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "Activa la ubicación para ver tu posición",
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Botón de enviar mensaje
+            // Botón de enviar mensaje (abre chat)
             Button(
-                onClick = { /* Enviar mensaje */ },
+                onClick = { navController.navigate(Route.Chat.path) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -158,15 +200,26 @@ fun DriverEnRouteScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.weight(1f))
             
-            // Botón de cancelar viaje
+            // Botones inferiores: finalizar o cancelar viaje
             Button(
-                onClick = { navController.navigate(Route.LocationSelection.path) },
+                onClick = { navController.navigate(Route.PaymentMethod.path) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                colors = ButtonDefaults.buttonColors(containerColor = MoviPetOrange)
             ) {
-                Text("CANCELAR VIAJE", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("FINALIZAR VIAJE", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = { navController.navigate(Route.LocationSelection.path) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("CANCELAR VIAJE", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Red)
             }
         }
         

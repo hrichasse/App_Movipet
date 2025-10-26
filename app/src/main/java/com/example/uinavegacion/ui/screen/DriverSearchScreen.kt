@@ -10,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.notification.NotificationHelper
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -22,12 +24,14 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun DriverSearchScreen(navController: NavController) {
+    val context = LocalContext.current
     var isLoading by remember { mutableStateOf(true) }
 
     // Simular búsqueda de conductor
     LaunchedEffect(Unit) {
         delay(3000) // 3 segundos de búsqueda
         isLoading = false
+        NotificationHelper.notifyDriverAssigned(context, "Juan Pérez")
         navController.navigate(Route.DriverSelection.path)
     }
 

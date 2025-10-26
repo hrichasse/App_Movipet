@@ -25,12 +25,14 @@ import com.example.uinavegacion.navigation.Route
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
+import com.example.uinavegacion.domain.validation.validateEmail
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -147,13 +149,22 @@ fun LoginScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Campos de entrada
+            // Campo correo con validación en vivo
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Usuario") },
+                value = email,
+                onValueChange = {
+                    email = it
+                    emailError = validateEmail(it)
+                },
+                label = { Text("Correo") },
+                isError = emailError != null,
+                supportingText = {
+                    if (emailError != null) {
+                        Text(emailError!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
             
             Spacer(modifier = Modifier.height(16.dp))
@@ -185,17 +196,26 @@ fun LoginScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.height(8.dp))
             
-            TextButton(
-                onClick = { /* TODO: Implementar recuperación de contraseña */ }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("¿Olvido su contraseña?")
+                TextButton(
+                    onClick = { /* TODO: Implementar recuperación de contraseña */ }
+                ) {
+                    Text("¿Olvidó su contraseña?")
+                }
+                TextButton(onClick = { navController.navigate(Route.Register.path) }) {
+                    Text("¿No tienes cuenta? Regístrate")
+                }
             }
             
             Spacer(modifier = Modifier.weight(1f))
             
             // Botón principal
             Button(
-                onClick = { navController.navigate(Route.LocationSelection.path) },
+                onClick = { navController.navigate(Route.Veterinarias.path) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

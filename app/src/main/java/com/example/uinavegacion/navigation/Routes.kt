@@ -3,6 +3,14 @@ package com.example.uinavegacion.navigation
 // Clase sellada para rutas: evita "strings mágicos" y facilita refactors
 sealed class Route(val path: String) { // Cada objeto representa una pantalla
     data object Login : Route("login") // Pantalla de inicio de sesión
+    data object Register : Route("register") // Pantalla de registro
+    data object Veterinarias : Route("veterinarias") // Veterinarias asociadas
+    data object TravelHistory : Route("travel_history") // Historial de viajes
+    data object Chat : Route("chat") // Chat en tiempo real
+    data object Rating : Route("rating") // Valoración del conductor
+    data object TripReceipt : Route("trip_receipt") // Comprobante de viaje
+    data object PaymentMethod : Route("payment_method") // Método de pago
+    data object Pets : Route("pets") // Mis mascotas
     data object UserMenu : Route("user_menu") // Menú de usuario/perfil
     data object LocationSelection : Route("location_selection") // Selección de ubicación
     data object PetTypeSelection : Route("pet_type_selection") // Selección de tipo de mascota

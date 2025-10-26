@@ -10,6 +10,12 @@ val MoviPetDarkGray = Color(0xFF666666) // Gris oscuro
 val MoviPetWhite = Color(0xFFFFFFFF) // Blanco
 val MoviPetBlack = Color(0xFF000000) // Negro
 
+// Colores para tema oscuro
+val MoviPetDarkBackground = Color(0xFF1A1A1A) // Fondo oscuro
+val MoviPetDarkSurface = Color(0xFF2D2D2D) // Superficie oscura
+val MoviPetOrangeDark = Color(0xFFFF8C5A) // Naranja más claro para contraste
+val MoviPetTealDark = Color(0xFF6EDFD6) // Teal más claro
+
 // Colores del tema original (mantenidos para compatibilidad)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

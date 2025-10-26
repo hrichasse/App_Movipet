@@ -93,6 +93,15 @@ fun UserMenuScreen(navController: NavController) {
             ) {
                 Column {
                     MenuItem(
+                        icon = Icons.Default.History,
+                        text = "Historial de viajes",
+                        onClick = { navController.navigate(com.example.uinavegacion.navigation.Route.TravelHistory.path) },
+                        showArrow = true
+                    )
+
+                    Divider()
+
+                    MenuItem(
                         icon = Icons.Default.Person,
                         text = "Perfil de usuario",
                         onClick = { /* Perfil */ }
@@ -103,7 +112,7 @@ fun UserMenuScreen(navController: NavController) {
                     MenuItem(
                         icon = Icons.Default.Pets,
                         text = "Mis mascotas",
-                        onClick = { /* Mascotas */ }
+                        onClick = { navController.navigate(com.example.uinavegacion.navigation.Route.Pets.path) }
                     )
                     
                     Divider()
@@ -117,11 +126,8 @@ fun UserMenuScreen(navController: NavController) {
                     
                     Divider()
                     
-                    MenuItem(
-                        icon = Icons.Default.Language,
-                        text = "Idioma",
-                        onClick = { /* Idioma */ }
-                    )
+                    // Toggle de Modo Oscuro
+                    com.example.uinavegacion.ui.components.ThemeToggleMenuItem()
                     
                     Divider()
                     

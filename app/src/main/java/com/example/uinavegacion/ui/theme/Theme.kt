@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = MoviPetOrange,
-    secondary = MoviPetTeal,
-    tertiary = MoviPetTeal,
-    background = MoviPetBlack,
-    surface = MoviPetDarkGray,
+    primary = MoviPetOrangeDark,
+    secondary = MoviPetTealDark,
+    tertiary = MoviPetTealDark,
+    background = MoviPetDarkBackground,
+    surface = MoviPetDarkSurface,
     onPrimary = MoviPetWhite,
     onSecondary = MoviPetWhite,
     onTertiary = MoviPetWhite,

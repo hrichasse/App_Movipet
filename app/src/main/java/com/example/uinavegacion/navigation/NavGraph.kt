@@ -6,6 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import com.example.uinavegacion.ui.screen.LoginScreen
+import com.example.uinavegacion.ui.screen.RegisterScreen
+import com.example.uinavegacion.ui.screen.VeterinariasScreen
+import com.example.uinavegacion.ui.screen.TravelHistoryScreen
+import com.example.uinavegacion.ui.screen.ChatScreen
+import com.example.uinavegacion.ui.screen.RatingScreen
+import com.example.uinavegacion.ui.screen.TripReceiptScreen
+import com.example.uinavegacion.ui.screen.PaymentMethodScreen
+import com.example.uinavegacion.ui.screen.PetsScreen
 import com.example.uinavegacion.ui.screen.UserMenuScreen
 import com.example.uinavegacion.ui.screen.LocationSelectionScreen
 import com.example.uinavegacion.ui.screen.PetTypeSelectionScreen
@@ -23,6 +31,30 @@ fun AppNavGraph(navController: NavHostController) {
     ) {
         composable(Route.Login.path) {
             LoginScreen(navController)
+        }
+        composable(Route.Register.path) {
+            RegisterScreen(navController)
+        }
+        composable(Route.Veterinarias.path) {
+            VeterinariasScreen(navController)
+        }
+        composable(Route.TravelHistory.path) {
+            TravelHistoryScreen(navController)
+        }
+        composable(Route.Chat.path) {
+            ChatScreen(navController)
+        }
+        composable(Route.Rating.path) {
+            RatingScreen(navController)
+        }
+        composable(Route.TripReceipt.path) {
+            TripReceiptScreen(navController)
+        }
+        composable(Route.PaymentMethod.path) {
+            PaymentMethodScreen(navController)
+        }
+        composable(Route.Pets.path) {
+            PetsScreen(navController)
         }
         
         composable(Route.UserMenu.path) {

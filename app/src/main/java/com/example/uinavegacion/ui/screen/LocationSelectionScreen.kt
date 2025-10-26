@@ -10,11 +10,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.uinavegacion.location.LocationViewModel
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.ui.components.CurrentLocationMap
+import com.example.uinavegacion.ui.components.RequestLocationPermissions
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -22,8 +28,32 @@ import com.example.uinavegacion.ui.theme.MoviPetLightGray
 
 @Composable
 fun LocationSelectionScreen(navController: NavController) {
+    val viewModel: LocationViewModel = viewModel()
+    var hasPermission by remember { mutableStateOf(false) }
+    var permissionRequested by remember { mutableStateOf(false) }
     var pickupLocation by remember { mutableStateOf("PATRONATO") }
     var dropoffLocation by remember { mutableStateOf("") }
+
+    val location by viewModel.location.collectAsStateWithLifecycle()
+    val address by viewModel.address.collectAsStateWithLifecycle()
+
+    // Solicitar permisos solo una vez
+    if (!permissionRequested) {
+        RequestLocationPermissions { granted ->
+            hasPermission = granted
+            permissionRequested = true
+            if (granted) {
+                viewModel.start()
+            }
+        }
+    }
+
+    // Actualizar ubicación actual cuando cambie (ahora con dirección legible)
+    LaunchedEffect(address) {
+        address?.let {
+            pickupLocation = it
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -112,49 +142,46 @@ fun LocationSelectionScreen(navController: NavController) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Mapa simulado
+            // Mapa con ubicación real
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(240.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MoviPetLightGray)
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                if (hasPermission) {
+                    CurrentLocationMap(
+                        location = location,
+                        modifier = Modifier.fillMaxSize(),
+                        zoom = 15f
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        // Icono de ubicación en el mapa
-                        Icon(
-                            Icons.Default.Pets,
-                            contentDescription = "Pet Location",
-                            modifier = Modifier.size(40.dp),
-                            tint = MoviPetOrange
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Mapa de ubicación",
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Universidad San Sebastian",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Barrio Italia",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Parque O'Higgins",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                Icons.Default.LocationOff,
+                                contentDescription = "Location disabled",
+                                modifier = Modifier.size(40.dp),
+                                tint = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Activa el permiso de ubicación",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "para ver el mapa",
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
