@@ -29,7 +29,7 @@ fun PaymentMethodScreen(navController: NavController) {
     
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
         Row(Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.popBackStack() }) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
+            IconButton(onClick = { navController.popBackStack() }) { Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite) }
             Text("Método de pago", style = MaterialTheme.typography.titleLarge, color = MoviPetWhite)
             Spacer(Modifier.size(48.dp))
         }
