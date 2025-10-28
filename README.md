@@ -6,8 +6,8 @@
 
 ## 👥 Estudiantes
 
-- **Hernan Richasse**
-- **Donkan Marin**
+- Hernan Richasse
+- Donkan Marin
 
 ## ✨ Funcionalidades Implementadas
 
