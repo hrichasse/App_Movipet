@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -30,6 +29,7 @@ import androidx.navigation.NavController
 import com.example.uinavegacion.data.MoviPetDatabase
 import com.example.uinavegacion.data.entity.PetEntity
 import com.example.uinavegacion.data.repository.PetRepository
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -83,11 +83,10 @@ fun PetsScreen(navController: NavController) {
     }
 
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
-        Row(Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.popBackStack() }) { Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite) }
-            Text("Mis mascotas", style = MaterialTheme.typography.titleLarge, color = MoviPetWhite)
-            Spacer(Modifier.size(48.dp))
-        }
+        MoviPetHeader(
+            title = "Mis mascotas",
+            onBackClick = { navController.popBackStack() }
+        )
 
         Column(Modifier.padding(16.dp)) {
             LazyColumn(modifier = Modifier.weight(1f, false)) {

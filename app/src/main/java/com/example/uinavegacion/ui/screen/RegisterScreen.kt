@@ -3,7 +3,6 @@ package com.example.uinavegacion.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -23,8 +22,8 @@ import com.example.uinavegacion.domain.validation.validateEmail
 import com.example.uinavegacion.domain.validation.validateNameLettersOnly
 import com.example.uinavegacion.domain.validation.validateStrongPass
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetOrange
-import com.example.uinavegacion.ui.theme.MoviPetWhite
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -44,25 +43,11 @@ fun RegisterScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Header con botón de regreso
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MoviPetOrange)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite)
-            }
-            Text(
-                text = "Registro",
-                style = MaterialTheme.typography.titleLarge,
-                color = MoviPetWhite
-            )
-            Spacer(Modifier.size(48.dp))
-        }
+        // Header con logo
+        MoviPetHeader(
+            title = "Registro",
+            onBackClick = { navController.popBackStack() }
+        )
 
         Column(
             modifier = Modifier

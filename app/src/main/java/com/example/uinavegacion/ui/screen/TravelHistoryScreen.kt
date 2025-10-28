@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.uinavegacion.data.MoviPetDatabase
 import com.example.uinavegacion.data.entity.TripEntity
 import com.example.uinavegacion.data.repository.TripRepository
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -48,20 +47,10 @@ fun TravelHistoryScreen(navController: NavController) {
             .fillMaxSize()
             .background(MoviPetLightGray)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MoviPetOrange)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite)
-            }
-            Text("Historial de viajes", style = MaterialTheme.typography.titleLarge, color = MoviPetWhite)
-            Spacer(Modifier.size(48.dp))
-        }
+        MoviPetHeader(
+            title = "Historial de viajes",
+            onBackClick = { navController.popBackStack() }
+        )
 
         if (trips.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

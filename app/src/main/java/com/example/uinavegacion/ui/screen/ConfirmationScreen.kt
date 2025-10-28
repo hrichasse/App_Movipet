@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -30,53 +31,10 @@ fun ConfirmationScreen(navController: NavController) {
             .fillMaxSize()
             .background(MoviPetTeal)
     ) {
-        // Header con logo MoviPet
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MoviPetTeal)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MoviPetWhite
-                )
-            }
-            
-            // Logo MoviPet
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .background(MoviPetOrange, androidx.compose.foundation.shape.CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("🚗", style = MaterialTheme.typography.titleMedium)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "MoviPet",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MoviPetWhite
-                )
-            }
-            
-            IconButton(onClick = { navController.navigate(Route.UserMenu.path) }) {
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = MoviPetWhite
-                )
-            }
-        }
+        MoviPetHeader(
+            title = "MoviPet",
+            onBackClick = { navController.popBackStack() }
+        )
         
         // Contenido principal
         Column(

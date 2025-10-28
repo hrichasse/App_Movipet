@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
@@ -32,17 +31,10 @@ fun ChatScreen(navController: NavController) {
     ) }
 
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
-        Row(
-            modifier = Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite)
-            }
-            Text("Chat con el conductor", style = MaterialTheme.typography.titleLarge, color = MoviPetWhite)
-            Spacer(Modifier.size(48.dp))
-        }
+        MoviPetHeader(
+            title = "Chat con el conductor",
+            onBackClick = { navController.popBackStack() }
+        )
 
         LazyColumn(modifier = Modifier.weight(1f).padding(12.dp)) {
             items(messages) { msg ->

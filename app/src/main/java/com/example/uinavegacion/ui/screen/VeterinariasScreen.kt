@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
@@ -27,25 +26,10 @@ fun VeterinariasScreen(navController: NavController) {
             .fillMaxSize()
             .background(MoviPetLightGray)
     ) {
-        // Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MoviPetOrange)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite)
-            }
-            Text(
-                text = "Veterinarias asociadas",
-                style = MaterialTheme.typography.titleLarge,
-                color = MoviPetWhite
-            )
-            Spacer(Modifier.size(48.dp))
-        }
+        MoviPetHeader(
+            title = "Veterinarias asociadas",
+            onBackClick = { navController.popBackStack() }
+        )
 
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Selecciona una veterinaria para continuar", color = Color.Black, fontSize = 16.sp)

@@ -3,8 +3,6 @@ package com.example.uinavegacion.ui.screen
 import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +18,7 @@ import com.example.uinavegacion.data.MoviPetDatabase
 import com.example.uinavegacion.data.entity.TripEntity
 import com.example.uinavegacion.data.repository.TripRepository
 import com.example.uinavegacion.navigation.Route
+import com.example.uinavegacion.ui.components.MoviPetHeader
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetWhite
@@ -61,11 +60,15 @@ fun RatingScreen(navController: NavController) {
     var isSaving by remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
-        Row(Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navController.popBackStack() }) { Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = MoviPetWhite) }
-            Text("Valora al conductor", style = MaterialTheme.typography.titleLarge, color = MoviPetWhite)
-            Spacer(Modifier.size(48.dp))
-        }
+        MoviPetHeader(
+            title = "Valora al conductor",
+            onBackClick = { navController.popBackStack() },
+            onHomeClick = { 
+                navController.navigate(Route.UserMenu.path) {
+                    popUpTo(Route.UserMenu.path) { inclusive = false }
+                }
+            }
+        )
 
         Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text("¿Cómo fue tu experiencia?", color = Color.Black, fontSize = 16.sp)
