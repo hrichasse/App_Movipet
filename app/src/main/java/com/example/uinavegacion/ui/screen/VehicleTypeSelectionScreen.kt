@@ -35,12 +35,12 @@ fun VehicleTypeSelectionScreen(navController: NavController) {
     var selectedVehicleType by remember { mutableStateOf("Van mediana") }
 
     val vehicleTypes = listOf(
-        VehicleType("Auto pequeño", Icons.Default.DirectionsCar),
-        VehicleType("Van mediana", Icons.Default.DirectionsCar),
-        VehicleType("Auto pequeño", Icons.Default.DirectionsCar),
+        VehicleType("Ambulancia", Icons.Default.DirectionsCar),
+        VehicleType("City Car", Icons.Default.DirectionsCar),
+        VehicleType("MoviPet", Icons.Default.DirectionsCar),
         VehicleType("Transporte especial", Icons.Default.DirectionsBus),
         VehicleType("Auto pequeño", Icons.Default.DirectionsCar),
-        VehicleType("Transporte especial", Icons.Default.DirectionsBus)
+        VehicleType("Transporte privado", Icons.Default.DirectionsBus)
     )
 
     Column(

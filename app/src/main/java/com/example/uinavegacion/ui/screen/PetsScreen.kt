@@ -64,6 +64,16 @@ fun PetsScreen(navController: NavController) {
         }
 
         Column(Modifier.padding(16.dp)) {
+            // Atajo para abrir la cámara y tomar foto de la mascota
+            OutlinedButton(
+                onClick = { navController.navigate(com.example.uinavegacion.navigation.Route.Camera.path) },
+                modifier = Modifier.fillMaxWidth().height(48.dp)
+            ) {
+                Text("Tomar foto de mascota")
+            }
+
+            Spacer(Modifier.height(12.dp))
+
             LazyColumn(modifier = Modifier.weight(1f, false)) {
                 items(pets, key = { it.id }) { pet ->
                     Card(

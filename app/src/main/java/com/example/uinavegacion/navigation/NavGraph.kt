@@ -22,6 +22,7 @@ import com.example.uinavegacion.ui.screen.ConfirmationScreen
 import com.example.uinavegacion.ui.screen.DriverSearchScreen
 import com.example.uinavegacion.ui.screen.DriverSelectionScreen
 import com.example.uinavegacion.ui.screen.DriverEnRouteScreen
+import com.example.uinavegacion.ui.screen.CameraScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -87,6 +88,9 @@ fun AppNavGraph(navController: NavHostController) {
         
         composable(Route.DriverEnRoute.path) {
             DriverEnRouteScreen(navController)
+        }
+        composable(Route.Camera.path) {
+            CameraScreen(navController)
         }
     }
 }
