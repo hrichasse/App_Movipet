@@ -19,7 +19,7 @@ sealed class Route(val path: String) { // Cada objeto representa una pantalla
     data object DriverSearch : Route("driver_search") // Búsqueda de conductor
     data object DriverSelection : Route("driver_selection") // Selección de conductor
     data object DriverEnRoute : Route("driver_en_route") // Conductor en camino
-    data object Camera : Route("camera") // Captura de fotos con cámara
+    data object Camera : Route("camera") // Captura de fotos con cámara (arg opcional: petId)
 }
 
 /*

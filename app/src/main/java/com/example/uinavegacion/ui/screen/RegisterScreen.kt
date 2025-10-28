@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -82,6 +85,7 @@ fun RegisterScreen(navController: NavController) {
                     nameError = validateNameLettersOnly(it)
                 },
                 label = { Text("Nombre") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                 isError = nameError != null,
                 supportingText = { if (nameError != null) Text(nameError!!, color = MaterialTheme.colorScheme.error) },
                 modifier = Modifier.fillMaxWidth()
@@ -96,6 +100,7 @@ fun RegisterScreen(navController: NavController) {
                     emailError = validateEmail(it)
                 },
                 label = { Text("Correo") },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
                 isError = emailError != null,
                 supportingText = { if (emailError != null) Text(emailError!!, color = MaterialTheme.colorScheme.error) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -112,6 +117,7 @@ fun RegisterScreen(navController: NavController) {
                     confirmError = validateConfirm(it, confirm)
                 },
                 label = { Text("Contraseña") },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 isError = passError != null,
                 supportingText = { if (passError != null) Text(passError!!, color = MaterialTheme.colorScheme.error) },
                 visualTransformation = PasswordVisualTransformation(),
@@ -128,6 +134,7 @@ fun RegisterScreen(navController: NavController) {
                     confirmError = validateConfirm(pass, it)
                 },
                 label = { Text("Confirmar contraseña") },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 isError = confirmError != null,
                 supportingText = { if (confirmError != null) Text(confirmError!!, color = MaterialTheme.colorScheme.error) },
                 visualTransformation = PasswordVisualTransformation(),

@@ -11,7 +11,7 @@ import com.example.uinavegacion.data.entity.TripEntity
 
 @Database(
     entities = [PetEntity::class, TripEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class MoviPetDatabase : RoomDatabase() {

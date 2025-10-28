@@ -6,10 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -31,6 +34,8 @@ import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetWhite
 import kotlinx.coroutines.launch
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 
 class PetsViewModel(application: Application) : AndroidViewModel(application) {
     private val database = MoviPetDatabase.getDatabase(application)
@@ -48,6 +53,14 @@ class PetsViewModel(application: Application) : AndroidViewModel(application) {
             repository.deletePet(pet)
         }
     }
+
+    fun attachPhoto(petId: Long, uri: String) {
+        viewModelScope.launch {
+            repository.getPetById(petId)?.let { pet ->
+                repository.updatePet(pet.copy(photoUri = uri))
+            }
+        }
+    }
 }
 
 @Composable
@@ -55,6 +68,19 @@ fun PetsScreen(navController: NavController) {
     val viewModel: PetsViewModel = viewModel()
     val pets by viewModel.allPets.collectAsStateWithLifecycle(initialValue = emptyList())
     var newPet by remember { mutableStateOf("") }
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val capturedUriState = savedStateHandle?.getLiveData<String>("capturedUri")?.observeAsState()
+    val capturedPetIdState = savedStateHandle?.getLiveData<Long>("capturedPetId")?.observeAsState()
+    val capturedUri = capturedUriState?.value
+    val capturedPetId = capturedPetIdState?.value
+
+    LaunchedEffect(capturedUri, capturedPetId) {
+        if (capturedUri != null && capturedPetId != null) {
+            viewModel.attachPhoto(capturedPetId!!, capturedUri!!)
+            savedStateHandle?.remove<String>("capturedUri")
+            savedStateHandle?.remove<Long>("capturedPetId")
+        }
+    }
 
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
         Row(Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -64,16 +90,6 @@ fun PetsScreen(navController: NavController) {
         }
 
         Column(Modifier.padding(16.dp)) {
-            // Atajo para abrir la cámara y tomar foto de la mascota
-            OutlinedButton(
-                onClick = { navController.navigate(com.example.uinavegacion.navigation.Route.Camera.path) },
-                modifier = Modifier.fillMaxWidth().height(48.dp)
-            ) {
-                Text("Tomar foto de mascota")
-            }
-
-            Spacer(Modifier.height(12.dp))
-
             LazyColumn(modifier = Modifier.weight(1f, false)) {
                 items(pets, key = { it.id }) { pet ->
                     Card(
@@ -86,9 +102,23 @@ fun PetsScreen(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column(Modifier.weight(1f)) {
-                                Text(pet.name, fontSize = 16.sp, color = Color.Black)
-                                Text(pet.type, fontSize = 12.sp, color = Color.Gray)
+                            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                                if (pet.photoUri != null) {
+                                    AsyncImage(
+                                        model = pet.photoUri,
+                                        contentDescription = "Foto de mascota",
+                                        modifier = Modifier.size(48.dp).background(MoviPetLightGray, CircleShape),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                    Spacer(Modifier.width(12.dp))
+                                }
+                                Column() {
+                                    Text(pet.name, fontSize = 16.sp, color = Color.Black)
+                                    Text(pet.type, fontSize = 12.sp, color = Color.Gray)
+                                }
+                            }
+                            IconButton(onClick = { navController.navigate("${com.example.uinavegacion.navigation.Route.Camera.path}?petId=${pet.id}") }) {
+                                Icon(Icons.Default.CameraAlt, contentDescription = "Tomar foto")
                             }
                             IconButton(onClick = { viewModel.deletePet(pet) }) {
                                 Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
@@ -102,11 +132,11 @@ fun PetsScreen(navController: NavController) {
 
             OutlinedTextField(value = newPet, onValueChange = { newPet = it }, label = { Text("Nombre de la mascota") }, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(8.dp))
-            Button(onClick = { 
-                if (newPet.isNotBlank()) { 
+            Button(onClick = {
+                if (newPet.isNotBlank()) {
                     viewModel.addPet(newPet)
-                    newPet = "" 
-                } 
+                    newPet = ""
+                }
             }, modifier = Modifier.fillMaxWidth().height(50.dp)) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(Modifier.width(8.dp))

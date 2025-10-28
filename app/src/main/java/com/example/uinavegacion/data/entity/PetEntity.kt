@@ -9,6 +9,7 @@ data class PetEntity(
     val id: Long = 0,
     val name: String,
     val type: String, // perro, gato, etc
+    val photoUri: String? = null,
     val breed: String? = null,
     val age: Int? = null,
     val weight: Double? = null,

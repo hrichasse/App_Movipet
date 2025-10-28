@@ -19,7 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -35,6 +35,7 @@ import com.example.uinavegacion.ui.theme.MoviPetWhite
 fun CameraScreen(navController: NavController) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val petIdArg = navController.currentBackStackEntry?.arguments?.getLong("petId")?.takeIf { it > 0 }
 
     var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
     var hasPermission by remember { mutableStateOf(false) }
@@ -105,8 +106,12 @@ fun CameraScreen(navController: NavController) {
         Button(
             onClick = {
                 imageCapture?.let { capture ->
-                    takePhoto(context, capture) { /* uri -> */
-                        // Después de capturar, volvemos o mostramos un toast
+                    takePhoto(context, capture) { uri ->
+                        val prev = navController.previousBackStackEntry
+                        if (uri != null) {
+                            prev?.savedStateHandle?.set("capturedUri", uri.toString())
+                            petIdArg?.let { prev?.savedStateHandle?.set("capturedPetId", it) }
+                        }
                         navController.popBackStack()
                     }
                 }

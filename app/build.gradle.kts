@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.movipet.app"
+    namespace = "com.example.uinavegacion"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.movipet.app"
+        applicationId = "com.example.uinavegacion"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -91,4 +91,12 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+
+    // Animaciones de navegación ahora provistas por Navigation Compose (2.9.5)
+
+    // Carga de imágenes (mostrar fotos por URI)
+    implementation(libs.coil.compose)
+
+    // LiveData interop para Compose (observeAsState)
+    implementation(libs.androidx.compose.runtime.livedata)
 }
