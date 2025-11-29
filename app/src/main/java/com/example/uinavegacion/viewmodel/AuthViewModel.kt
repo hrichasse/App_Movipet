@@ -1,5 +1,7 @@
 package com.example.uinavegacion.viewmodel
 
+import com.example.uinavegacion.data.model.LoginRequest
+import com.example.uinavegacion.data.model.RegisterRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uinavegacion.data.api.RetrofitClient
@@ -27,7 +29,12 @@ class AuthViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                val user = repository.login(email, password)
+                val user = repository.login(
+                    LoginRequest(
+                        email = email,
+                        password = password
+                    )
+                )
                 _currentUser.value = user
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -43,7 +50,13 @@ class AuthViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                val user = repository.register(name, email, password)
+                val user = repository.register(
+                    RegisterRequest(
+                        name = name,
+                        email = email,
+                        password = password
+                    )
+                )
                 _currentUser.value = user
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -58,5 +71,3 @@ class AuthViewModel : ViewModel() {
         _error.value = null
     }
 }
-
-

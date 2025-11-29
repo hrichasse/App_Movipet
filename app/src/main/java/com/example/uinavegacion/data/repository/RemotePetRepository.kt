@@ -7,15 +7,49 @@ class RemotePetRepository(
     private val api: MovipetApi
 ) {
 
+    // LISTAR TODAS LAS MASCOTAS
     suspend fun getAllPets(): List<Pet> {
-        return api.getAllPets()
+        val response = api.getAllPets()   // Response<List<Pet>>
+
+        if (response.isSuccessful) {
+            return response.body() ?: emptyList()
+        } else {
+            val error = response.errorBody()?.string()
+            throw Exception("Error obteniendo mascotas: ${response.code()} - $error")
+        }
     }
 
+    // CREAR MASCOTA
     suspend fun createPet(pet: Pet): Pet {
-        return api.createPet(pet)
+        val response = api.createPet(pet) // Response<Pet>
+
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                return body
+            } else {
+                throw Exception("El servidor respondió sin cuerpo al crear mascota.")
+            }
+        } else {
+            val error = response.errorBody()?.string()
+            throw Exception("Error creando mascota: ${response.code()} - $error")
+        }
     }
 
+    // OBTENER MASCOTA POR ID
     suspend fun getPetById(id: String): Pet {
-        return api.getPetById(id)
+        val response = api.getPetById(id) // Response<Pet>
+
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                return body
+            } else {
+                throw Exception("El servidor respondió sin cuerpo al buscar mascota.")
+            }
+        } else {
+            val error = response.errorBody()?.string()
+            throw Exception("Error obteniendo mascota: ${response.code()} - $error")
+        }
     }
 }
