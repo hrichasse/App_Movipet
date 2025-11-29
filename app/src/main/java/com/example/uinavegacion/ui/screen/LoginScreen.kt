@@ -34,10 +34,10 @@ fun LoginScreen(
     val error by authViewModel.error.collectAsStateWithLifecycle()
     val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
 
-    // Si ya se logueó correctamente → ir al menú de usuario
+    // Si ya se logueó correctamente → ir a
     LaunchedEffect(currentUser) {
         if (currentUser != null) {
-            navController.navigate(Route.UserMenu.path) {
+            navController.navigate(Route.LocationSelection.path) {
                 popUpTo(Route.Login.path) { inclusive = true }
             }
         }

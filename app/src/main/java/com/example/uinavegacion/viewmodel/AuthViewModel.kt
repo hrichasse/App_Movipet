@@ -67,7 +67,15 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    // NUEVO: cerrar sesión limpiando estado
+    fun logout() {
+        _currentUser.value = null
+        _error.value = null
+        _isLoading.value = false
+    }
+
     fun clearError() {
         _error.value = null
     }
 }
+
