@@ -37,7 +37,7 @@ fun RegisterScreen(
     LaunchedEffect(currentUser) {
         if (currentUser != null) {
             // opción A: ir directo al menú
-            navController.navigate(Route.UserMenu.path) {
+            navController.navigate(Route.LocationSelection.path) {
                 popUpTo(Route.Register.path) { inclusive = true }
             }
 
