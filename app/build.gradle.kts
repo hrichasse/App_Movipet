@@ -19,6 +19,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // CONFIGURACION DE FIRMA PARA RELEASE
+    signingConfigs {
+        create("release") {
+            // Ruta al .jks desde la raíz del proyecto
+            storeFile = rootProject.file("keystore/movipet-release.jks")
+            storePassword = "1234567"
+            keyAlias = "Key0"
+            keyPassword = "1234567"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -26,8 +37,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // 🔗 usamos la config de firma "release"
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -58,7 +72,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    //librerias nuevas
+    // Navegación y lifecycle
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -72,17 +86,15 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
 
-    // (Opcional) Kotlin Coroutines Play Services helpers
+    // Kotlin Coroutines Play Services helpers
     implementation(libs.kotlinx.coroutines.play.services)
-
-    // Lifecycle + Compose (ya declarada arriba en 2.9.4) — eliminamos duplicado que causaba advertencia/error en IDE
 
     // Room Database para persistencia
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-        // DataStore para preferencias (tema oscuro/claro)
+    // DataStore para preferencias (tema oscuro/claro)
     implementation(libs.androidx.datastore.preferences)
 
     // CameraX para cámara nativa
@@ -92,11 +104,11 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
 
-    //
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //pruebas unitarias:
+    // Pruebas unitarias
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.12.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")

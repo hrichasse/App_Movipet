@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "UINavegacion"
 include(":app")
- 
+include(":keystore")
