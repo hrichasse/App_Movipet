@@ -1,6 +1,5 @@
 package com.example.uinavegacion.ui.screen
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -12,53 +11,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.uinavegacion.data.MoviPetDatabase
-import com.example.uinavegacion.data.entity.TripEntity
-import com.example.uinavegacion.data.repository.TripRepository
+import com.example.uinavegacion.data.model.Trip
 import com.example.uinavegacion.navigation.Route
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetWhite
-import kotlinx.coroutines.launch
-
-class RatingViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = MoviPetDatabase.getDatabase(application)
-    private val repository = TripRepository(database.tripDao())
-
-    fun saveTripWithRating(rating: Int, comment: String, onSaved: () -> Unit) {
-        viewModelScope.launch {
-            // Crear viaje de demostración con la valoración
-            val trip = TripEntity(
-                fromAddress = "Tu ubicación",
-                toAddress = "Veterinaria",
-                fromLat = -33.4489,
-                fromLon = -70.6693,
-                toLat = -33.4520,
-                toLon = -70.6620,
-                driverName = "Juan Pérez",
-                driverCar = "ABCD-12",
-                distance = 5.2,
-                duration = 14,
-                cost = 7900.0,
-                rating = rating,
-                comment = comment
-            )
-            repository.insertTrip(trip)
-            onSaved()
-        }
-    }
-}
+import com.example.uinavegacion.viewmodel.TripViewModel
 
 @Composable
-fun RatingScreen(navController: NavController) {
-    val viewModel: RatingViewModel = viewModel()
+fun RatingScreen(
+    navController: NavController,
+    tripViewModel: TripViewModel = viewModel()
+) {
     var rating by remember { mutableIntStateOf(0) }
     var comment by remember { mutableStateOf("") }
-    var isSaving by remember { mutableStateOf(false) }
+    
+    val isLoading by tripViewModel.isLoading.collectAsStateWithLifecycle()
+    val error by tripViewModel.error.collectAsStateWithLifecycle()
+    val createSuccess by tripViewModel.createSuccess.collectAsStateWithLifecycle()
+
+    // Cuando se crea exitosamente, navegar
+    LaunchedEffect(createSuccess) {
+        if (createSuccess) {
+            tripViewModel.resetCreateSuccess()
+            navController.navigate(Route.TripReceipt.path) {
+                popUpTo(Route.Rating.path) { inclusive = true }
+            }
+        }
+    }
 
     Column(Modifier.fillMaxSize().background(MoviPetLightGray)) {
         Row(Modifier.fillMaxWidth().background(MoviPetOrange).padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -81,26 +64,53 @@ fun RatingScreen(navController: NavController) {
 
             Spacer(Modifier.height(16.dp))
 
-            OutlinedTextField(value = comment, onValueChange = { comment = it }, label = { Text("Comentarios") }, modifier = Modifier.fillMaxWidth().heightIn(min = 80.dp))
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                label = { Text("Comentarios") },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 80.dp)
+            )
 
             Spacer(Modifier.height(16.dp))
+
+            // Error del backend
+            if (error != null) {
+                Text(
+                    text = "Error: $error",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
 
             Button(
                 onClick = {
                     if (rating > 0) {
-                        isSaving = true
-                        viewModel.saveTripWithRating(rating, comment) {
-                            isSaving = false
-                            navController.navigate(Route.TripReceipt.path) {
-                                popUpTo(Route.Rating.path) { inclusive = true }
-                            }
-                        }
+                        // Crear trip con todos los datos requeridos
+                        val trip = Trip(
+                            fromAddress = "Tu ubicación",
+                            toAddress = "Veterinaria",
+                            fromLat = -33.4489,
+                            fromLon = -70.6693,
+                            toLat = -33.4520,
+                            toLon = -70.6620,
+                            driverName = "Juan Pérez",
+                            driverCar = "ABCD-12",
+                            distance = 5.2,
+                            duration = 14,
+                            cost = 7900.0,
+                            rating = rating,
+                            comment = comment.ifBlank { null },
+                            petId = null, // asigna si tienes petId
+                            veterinaryName = "VetCare Center"
+                        )
+                        tripViewModel.createTrip(trip)
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                enabled = rating > 0 && !isSaving
+                enabled = rating > 0 && !isLoading
             ) {
-                if (isSaving) {
+                if (isLoading) {
                     CircularProgressIndicator(color = MoviPetWhite, modifier = Modifier.size(24.dp))
                 } else {
                     Text("Enviar valoración")

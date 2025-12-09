@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.uinavegacion.ui.screen.LoginScreen
 import com.example.uinavegacion.ui.screen.RegisterScreen
 import com.example.uinavegacion.ui.screen.VeterinariasScreen
+import com.example.uinavegacion.ui.screen.AddClinicScreen
 import com.example.uinavegacion.ui.screen.TravelHistoryScreen
 import com.example.uinavegacion.ui.screen.ChatScreen
 import com.example.uinavegacion.ui.screen.RatingScreen
@@ -38,6 +39,9 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable(Route.Veterinarias.path) {
             VeterinariasScreen(navController)
+        }
+        composable(Route.AddClinic.path) {
+            AddClinicScreen(navController)
         }
         composable(Route.TravelHistory.path) {
             TravelHistoryScreen(navController)

@@ -28,10 +28,18 @@ fun RegisterScreen(
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     val isLoading by authViewModel.isLoading.collectAsStateWithLifecycle()
     val error by authViewModel.error.collectAsStateWithLifecycle()
     val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
+
+    // Validación
+    val isNameValid = name.isNotBlank()
+    val isEmailValid = email.isNotBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    val isPasswordValid = password.length >= 6
+    val isPasswordMatch = password == confirmPassword && confirmPassword.isNotBlank()
+    val isFormValid = isNameValid && isEmailValid && isPasswordValid && isPasswordMatch
 
     // Si se registró bien → puedes mandarlo directo al menú o al Login
     LaunchedEffect(currentUser) {
@@ -82,33 +90,66 @@ fun RegisterScreen(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nombre") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text("Correo electrónico") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Contraseña") },
+                    label = { Text("Nombre completo *") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    visualTransformation = PasswordVisualTransformation()
+                    enabled = !isLoading
                 )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Correo electrónico *") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                isError = email.isNotBlank() && !isEmailValid,
+                supportingText = {
+                    if (email.isNotBlank() && !isEmailValid) {
+                        Text("Email inválido", color = Color.Red)
+                    }
+                },
+                enabled = !isLoading
+            )
+            
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña *") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                isError = password.isNotBlank() && !isPasswordValid,
+                supportingText = {
+                    if (password.isNotBlank() && !isPasswordValid) {
+                        Text("Mínimo 6 caracteres", color = Color.Red)
+                    }
+                },
+                enabled = !isLoading
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
+                label = { Text("Confirmar contraseña *") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                isError = confirmPassword.isNotBlank() && !isPasswordMatch,
+                supportingText = {
+                    if (confirmPassword.isNotBlank() && !isPasswordMatch) {
+                        Text("Las contraseñas no coinciden", color = Color.Red)
+                    }
+                },
+                enabled = !isLoading
+            )
+
+            Spacer(Modifier.height(16.dp))
 
                 Button(
                     onClick = {

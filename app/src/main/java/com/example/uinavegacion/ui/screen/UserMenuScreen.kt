@@ -128,9 +128,9 @@ fun UserMenuScreen(
                     Divider()
 
                     MenuItem(
-                        icon = Icons.Default.Notifications,
-                        text = "Notificaciones",
-                        onClick = { /* Notificaciones */ },
+                        icon = Icons.Default.LocalHospital,
+                        text = "Veterinarias asociadas",
+                        onClick = { navController.navigate(Route.Veterinarias.path) },
                         showArrow = true
                     )
 

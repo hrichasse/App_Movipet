@@ -4,6 +4,8 @@ import com.example.uinavegacion.data.model.LoginRequest
 import com.example.uinavegacion.data.model.RegisterRequest
 import com.example.uinavegacion.data.model.User
 import com.example.uinavegacion.data.model.Pet
+import com.example.uinavegacion.data.model.Clinic
+import com.example.uinavegacion.data.model.Trip
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,4 +40,24 @@ interface MovipetApi {
     suspend fun getPetById(
         @Path("id") id: String
     ): Response<Pet>
+
+    // ---------- CLINICS ----------
+
+    @GET("api/clinics")
+    suspend fun getAllClinics(): Response<List<Clinic>>
+
+    @POST("api/clinics")
+    suspend fun createClinic(
+        @Body clinic: Clinic
+    ): Response<Clinic>
+
+    // ---------- TRIPS ----------
+
+    @GET("api/trips")
+    suspend fun getAllTrips(): Response<List<Trip>>
+
+    @POST("api/trips")
+    suspend fun createTrip(
+        @Body trip: Trip
+    ): Response<Trip>
 }

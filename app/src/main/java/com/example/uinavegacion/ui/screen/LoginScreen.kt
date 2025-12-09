@@ -34,6 +34,11 @@ fun LoginScreen(
     val error by authViewModel.error.collectAsStateWithLifecycle()
     val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
 
+    // Validación
+    val isEmailValid = email.isNotBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    val isPasswordValid = password.length >= 6
+    val isFormValid = isEmailValid && isPasswordValid
+
     // Si ya se logueó correctamente → ir a
     LaunchedEffect(currentUser) {
         if (currentUser != null) {
@@ -80,7 +85,14 @@ fun LoginScreen(
                     onValueChange = { email = it },
                     label = { Text("Correo electrónico") },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    isError = email.isNotBlank() && !isEmailValid,
+                    supportingText = {
+                        if (email.isNotBlank() && !isEmailValid) {
+                            Text("Email inválido", color = Color.Red)
+                        }
+                    },
+                    enabled = !isLoading
                 )
 
                 Spacer(Modifier.height(12.dp))
@@ -91,7 +103,14 @@ fun LoginScreen(
                     label = { Text("Contraseña") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = password.isNotBlank() && !isPasswordValid,
+                    supportingText = {
+                        if (password.isNotBlank() && !isPasswordValid) {
+                            Text("Mínimo 6 caracteres", color = Color.Red)
+                        }
+                    },
+                    enabled = !isLoading
                 )
 
                 Spacer(Modifier.height(16.dp))
@@ -101,7 +120,7 @@ fun LoginScreen(
                     onClick = {
                         authViewModel.login(email.trim(), password)
                     },
-                    enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
+                    enabled = !isLoading && isFormValid,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),

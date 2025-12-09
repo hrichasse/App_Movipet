@@ -5,6 +5,7 @@ sealed class Route(val path: String) { // Cada objeto representa una pantalla
     data object Login : Route("login") // Pantalla de inicio de sesión
     data object Register : Route("register") // Pantalla de registro
     data object Veterinarias : Route("veterinarias") // Veterinarias asociadas
+    data object AddClinic : Route("add_clinic") // Agregar veterinaria
     data object TravelHistory : Route("travel_history") // Historial de viajes
     data object Chat : Route("chat") // Chat en tiempo real
     data object Rating : Route("rating") // Valoración del conductor

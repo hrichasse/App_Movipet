@@ -5,6 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
+    // 🔥 EMULADOR: usar 10.0.2.2
+    // 🔥 DISPOSITIVO FÍSICO: cambiar a tu IP local (ej: "http://192.168.1.5:8080/")
     private const val BASE_URL = "http://10.0.2.2:8080/"
 
     val movipetApi: MovipetApi by lazy {
