@@ -1,6 +1,7 @@
 package com.example.uinavegacion.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,9 +25,12 @@ import com.example.uinavegacion.ui.screen.DriverSearchScreen
 import com.example.uinavegacion.ui.screen.DriverSelectionScreen
 import com.example.uinavegacion.ui.screen.DriverEnRouteScreen
 import com.example.uinavegacion.ui.screen.CameraScreen
+import com.example.uinavegacion.viewmodel.TripSelectionViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
+    val tripSelectionViewModel: TripSelectionViewModel = viewModel()
+    
     NavHost(
         navController = navController,
         startDestination = Route.Login.path
@@ -71,15 +75,15 @@ fun AppNavGraph(navController: NavHostController) {
         }
         
         composable(Route.PetTypeSelection.path) {
-            PetTypeSelectionScreen(navController)
+            PetTypeSelectionScreen(navController, tripSelectionViewModel)
         }
         
         composable(Route.VehicleTypeSelection.path) {
-            VehicleTypeSelectionScreen(navController)
+            VehicleTypeSelectionScreen(navController, tripSelectionViewModel)
         }
         
         composable(Route.Confirmation.path) {
-            ConfirmationScreen(navController)
+            ConfirmationScreen(navController, tripSelectionViewModel)
         }
         
         composable(Route.DriverSearch.path) {

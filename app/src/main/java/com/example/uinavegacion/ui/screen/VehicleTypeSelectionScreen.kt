@@ -16,14 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.uinavegacion.navigation.Route
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
+import com.example.uinavegacion.viewmodel.TripSelectionViewModel
 
 data class VehicleType(
     val name: String,
@@ -31,13 +34,13 @@ data class VehicleType(
 )
 
 @Composable
-fun VehicleTypeSelectionScreen(navController: NavController) {
+fun VehicleTypeSelectionScreen(navController: NavController, tripViewModel: TripSelectionViewModel) {
     var selectedVehicleType by remember { mutableStateOf("Van mediana") }
 
     val vehicleTypes = listOf(
         VehicleType("Ambulancia", Icons.Default.DirectionsCar),
         VehicleType("City Car", Icons.Default.DirectionsCar),
-        VehicleType("MoviPet", Icons.Default.DirectionsCar),
+        VehicleType("Van mediana", Icons.Default.DirectionsCar),
         VehicleType("Transporte especial", Icons.Default.DirectionsBus),
         VehicleType("Auto pequeño", Icons.Default.DirectionsCar),
         VehicleType("Transporte privado", Icons.Default.DirectionsBus)
@@ -124,7 +127,10 @@ fun VehicleTypeSelectionScreen(navController: NavController) {
             
             // Botón de elegir
             Button(
-                onClick = { navController.navigate(Route.Confirmation.path) },
+                onClick = {
+                    tripViewModel.setVehicleType(selectedVehicleType)
+                    navController.navigate(Route.Confirmation.path)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -178,7 +184,7 @@ fun VehicleTypeCard(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 color = if (isSelected) MoviPetWhite else Color.Black,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                textAlign = TextAlign.Center
             )
         }
     }

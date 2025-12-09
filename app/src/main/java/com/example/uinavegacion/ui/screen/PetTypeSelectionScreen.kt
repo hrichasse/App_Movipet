@@ -18,12 +18,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.uinavegacion.navigation.Route
 import com.example.uinavegacion.ui.theme.MoviPetOrange
 import com.example.uinavegacion.ui.theme.MoviPetTeal
 import com.example.uinavegacion.ui.theme.MoviPetWhite
 import com.example.uinavegacion.ui.theme.MoviPetLightGray
+import com.example.uinavegacion.viewmodel.TripSelectionViewModel
 
 data class PetType(
     val name: String,
@@ -31,7 +33,7 @@ data class PetType(
 )
 
 @Composable
-fun PetTypeSelectionScreen(navController: NavController) {
+fun PetTypeSelectionScreen(navController: NavController, tripViewModel: TripSelectionViewModel) {
     var selectedPetType by remember { mutableStateOf("Perro grande") }
 
     val petTypes = listOf(
@@ -127,7 +129,10 @@ fun PetTypeSelectionScreen(navController: NavController) {
             
             // Botón de elegir
             Button(
-                onClick = { navController.navigate(Route.VehicleTypeSelection.path) },
+                onClick = {
+                    tripViewModel.setPetType(selectedPetType)
+                    navController.navigate(Route.VehicleTypeSelection.path)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
