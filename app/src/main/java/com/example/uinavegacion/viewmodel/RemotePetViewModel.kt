@@ -52,6 +52,18 @@ class RemotePetViewModel : ViewModel() {
         }
     }
 
+    fun deletePet(petId: String) {
+        viewModelScope.launch {
+            try {
+                repository.deletePet(petId)
+                loadPets() // recarga la lista después de eliminar
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _error.value = e.message ?: "Error al eliminar mascota"
+            }
+        }
+    }
+
     init {
         // Apenas se crea el ViewModel, prueba el backend
         viewModelScope.launch {

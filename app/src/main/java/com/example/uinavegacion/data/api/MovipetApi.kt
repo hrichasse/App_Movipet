@@ -8,6 +8,7 @@ import com.example.uinavegacion.data.model.Clinic
 import com.example.uinavegacion.data.model.Trip
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -40,6 +41,11 @@ interface MovipetApi {
     suspend fun getPetById(
         @Path("id") id: String
     ): Response<Pet>
+
+    @DELETE("api/pets/{id}")
+    suspend fun deletePet(
+        @Path("id") id: String
+    ): Response<Unit>
 
     // ---------- CLINICS ----------
 

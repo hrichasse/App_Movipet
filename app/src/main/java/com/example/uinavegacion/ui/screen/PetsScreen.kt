@@ -252,8 +252,9 @@ fun PetsScreen(
                     PetItem(
                         pet = pet,
                         onDelete = {
-                            // Cuando tengas DELETE en el backend:
-                            // remoteVm.deletePet(pet)
+                            pet.id?.let { id ->
+                                remoteVm.deletePet(id)
+                            }
                         }
                     )
                 }

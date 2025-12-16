@@ -36,6 +36,16 @@ class RemotePetRepository(
         }
     }
 
+    // ELIMINAR MASCOTA
+    suspend fun deletePet(id: String) {
+        val response = api.deletePet(id)
+
+        if (!response.isSuccessful) {
+            val error = response.errorBody()?.string()
+            throw Exception("Error eliminando mascota: ${response.code()} - $error")
+        }
+    }
+
     // OBTENER MASCOTA POR ID
     suspend fun getPetById(id: String): Pet {
         val response = api.getPetById(id) // Response<Pet>
